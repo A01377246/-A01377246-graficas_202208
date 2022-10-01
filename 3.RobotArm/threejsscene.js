@@ -49,7 +49,7 @@ function createRobotArmMovementPanel() {
     elbowGroup.rotation.x = delta;
   });
   MovementGui.add(settings, "Forearm Y", -1.5, 1.5, 0.001).onChange((delta) => {
-    forearm.rotation.y = delta;
+    forearmGroup.rotation.y = delta;
   });
   MovementGui.add(settings, "Wrist X", -1.5, 1.5, 0.001).onChange((delta) => {
     wristGroup.rotation.y = delta;
@@ -189,16 +189,16 @@ function createScene(canvas) {
   handGroup.add(hand);
   wristGroup.add(wrist);
   wristGroup.add(handGroup);
-  forearmGroup.add(wristGroup);
-  forearmGroup.add(forearm);
+
   elbowGroup.add(forearmGroup);
   elbowGroup.add(elbow);
+
   armGroup.add(arm);
   armGroup.add(elbowGroup);
   shoulderGroup.add(shoulder);
   shoulderGroup.add(armGroup);
-
-  //elbowGroup.add(forearmGroup);
+  forearmGroup.add(forearm);
+  forearmGroup.add(wristGroup);
 
   shoulderGroup.position.set(1, 0, 0);
   armGroup.position.set(0, -0.65, 0);

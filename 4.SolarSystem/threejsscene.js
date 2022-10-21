@@ -29,6 +29,7 @@ let renderer = null,
   pluto = null,
   plutoGroup = null,
   asteroidBelt = null,
+  saturnRing = null,
   moon = null,
   sunGroup = null,
   geometry = null,
@@ -43,12 +44,26 @@ function main() {
   update();
 }
 
-const createOrbit = (innerOrbitRadius, outerOrbitRadius) => {
-  //This basic material will not be affected by light, the parameters are passed as an object
-  const orbitMaterial = new THREE.MeshBasicMaterial({
-    color: 0xf7ef8a,
-    side: THREE.DoubleSide,
-  });
+const createOrbit = (innerOrbitRadius, outerOrbitRadius, isSaturn) => {
+  isSaturn = isSaturn || null;
+
+  let orbitMaterial = null;
+
+  if (isSaturn !== null) {
+    const ringTextureURL = "./resources/saturn_ring_texture.png";
+    const ringTexture = new THREE.TextureLoader().load(ringTextureURL);
+    orbitMaterial = new THREE.MeshBasicMaterial({
+      map: ringTexture,
+      side: THREE.DoubleSide,
+    });
+  } else {
+    //This basic material will not be affected by light, the parameters are passed as an object
+    orbitMaterial = new THREE.MeshBasicMaterial({
+      color: 0xf7ef8a,
+      side: THREE.DoubleSide,
+    });
+  }
+
   let geometryOfPlanetOrbit = new THREE.RingGeometry(
     innerOrbitRadius,
     outerOrbitRadius,
@@ -115,6 +130,9 @@ function animate() {
   marsGroup.rotation.y += angle * 1.3;
   jupiterGroup.rotation.y += angle * 0.5;
   moon.rotation.y += angle * 5;
+  saturnGroup.rotation.y += angle * 0.8;
+  saturnRing.rotation.z += angle * 5;
+  uranusGroup.rotation.y += angle * 1;
 }
 
 /**
@@ -252,12 +270,36 @@ function createScene(canvas) {
 
   jupiterGroup = new THREE.Object3D();
   const jupiterTextureURL = "./resources/jupiter_texture.jpg";
-  const jupiterTextureBump = "";
   let jupiter = createPlanet(0.7, jupiterTextureURL);
   jupiter.position.set(-14, 0, 0);
   let jupiterOrbit = createOrbit(14, 13.9);
   jupiterGroup.add(jupiter, jupiterOrbit);
   scene.add(jupiterGroup);
+
+  //Saturn
+
+  saturnGroup = new THREE.Object3D();
+  const saturnTextureURL = "./resources/saturn_texture.jpg";
+  let saturn = createPlanet(0.67, saturnTextureURL);
+  saturn.position.set(-18, 0, 0);
+  let saturnOrbit = createOrbit(18, 17.9);
+  saturnRing = createOrbit(1, 1.1, true);
+  saturnRing.position.set(-18, 0, 0);
+
+  saturnGroup.add(saturn, saturnRing, saturnOrbit);
+
+  scene.add(saturnGroup);
+
+  //Uranus
+
+  uranusGroup = new THREE.Object3D();
+  const uranusTextureURL = "./resources/uranus_texture.jpg";
+  let uranus = createPlanet(0.45, uranusTextureURL);
+  uranus.position.set(-22, 0, 0);
+  let uranusOrbit = createOrbit(22, 21.9);
+  uranusGroup.add(uranus, uranusOrbit);
+
+  scene.add(uranusGroup);
 
   // add mouse handling so we can rotate the scene
   addMouseHandler(canvas, sunGroup);

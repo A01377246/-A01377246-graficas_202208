@@ -113,6 +113,7 @@ function animate() {
   venusGroup.rotation.y += angle * 2;
   earthGroup.rotation.y += angle * 1.2;
   marsGroup.rotation.y += angle * 1.3;
+  jupiterGroup.rotation.y += angle * 0.5;
   moon.rotation.y += angle * 5;
 }
 
@@ -159,7 +160,7 @@ function createScene(canvas) {
     1,
     1000
   );
-  camera.position.z = 15;
+  camera.position.z = 40;
   scene.add(camera);
   orbitControls = new OrbitControls(camera, renderer.domElement);
 
@@ -243,11 +244,21 @@ function createScene(canvas) {
   let mars = createPlanet(0.25, marsTextureURL, marsTextureBumpURL);
   marsGroup.add(mars);
   mars.position.set(-9, 0, 0);
-
   let marsOrbit = createOrbit(9, 8.9);
-
   marsGroup.add(mars, marsOrbit);
   scene.add(marsGroup);
+
+  //Jupiter
+
+  jupiterGroup = new THREE.Object3D();
+  const jupiterTextureURL = "./resources/jupiter_texture.jpg";
+  const jupiterTextureBump = "";
+  let jupiter = createPlanet(0.7, jupiterTextureURL);
+  jupiter.position.set(-14, 0, 0);
+  let jupiterOrbit = createOrbit(14, 13.9);
+  jupiterGroup.add(jupiter, jupiterOrbit);
+  scene.add(jupiterGroup);
+
   // add mouse handling so we can rotate the scene
   addMouseHandler(canvas, sunGroup);
 }

@@ -133,6 +133,8 @@ function animate() {
   saturnGroup.rotation.y += angle * 0.8;
   saturnRing.rotation.z += angle * 5;
   uranusGroup.rotation.y += angle * 1;
+  neptuneGroup.rotation.y += angle * 0.8;
+  plutoGroup.rotation.y += angle * 1.5;
 }
 
 /**
@@ -178,7 +180,7 @@ function createScene(canvas) {
     1,
     1000
   );
-  camera.position.z = 40;
+  camera.position.z = 60;
   scene.add(camera);
   orbitControls = new OrbitControls(camera, renderer.domElement);
 
@@ -300,6 +302,26 @@ function createScene(canvas) {
   uranusGroup.add(uranus, uranusOrbit);
 
   scene.add(uranusGroup);
+
+  //Neptune
+
+  neptuneGroup = new THREE.Object3D();
+  const neptuneTextureURL = "./resources/neptune_texture.jpg";
+  let neptune = createPlanet(0.4, neptuneTextureURL);
+  neptune.position.set(-25, 0, 0);
+  let neptuneOrbit = createOrbit(25, 24.9);
+  neptuneGroup.add(neptune, neptuneOrbit);
+  scene.add(neptuneGroup);
+
+  //Pluto
+
+  plutoGroup = new THREE.Object3D();
+  const plutoTextureURL = "./resources/pluto_texture.jpg";
+  let pluto = createPlanet(0.2, plutoTextureURL);
+  pluto.position.set(-28, 0, 0);
+  let plutoOrbit = createOrbit(28, 27.9);
+  plutoGroup.add(pluto, plutoOrbit);
+  scene.add(plutoGroup);
 
   // add mouse handling so we can rotate the scene
   addMouseHandler(canvas, sunGroup);

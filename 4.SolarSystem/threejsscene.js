@@ -125,16 +125,25 @@ function animate() {
   // Rotate the sphere group about its Y axis
   sunGroup.rotation.y -= angle / 2;
   mercuryGroup.rotation.y += angle * 1;
+  mercury.rotation.y += angle / 2;
   venusGroup.rotation.y += angle * 2;
+  venus.rotation.y += angle * 1.5;
   earthGroup.rotation.y += angle * 1.2;
+  earth.rotation.y += angle * 1.3;
   marsGroup.rotation.y += angle * 1.3;
+  mars.rotation.y += angle / 2;
   jupiterGroup.rotation.y += angle * 0.5;
+  jupiter.rotation.y += angle * 1.8;
   moon.rotation.y += angle * 5;
   saturnGroup.rotation.y += angle * 0.8;
+  saturn.rotation.y += angle * 1.2;
   saturnRing.rotation.z += angle * 5;
   uranusGroup.rotation.y += angle * 1;
+  uranus.rotation.y += angle * 1.8;
   neptuneGroup.rotation.y += angle * 0.8;
+  neptune.rotation.y += angle * 1.7;
   plutoGroup.rotation.y += angle * 1.5;
+  pluto.rotation.y += angle * 2;
 }
 
 /**
@@ -218,7 +227,7 @@ function createScene(canvas) {
   mercuryGroup = new THREE.Object3D();
   const mercuryTextureURL = "./resources/mercury_texture.jpg";
   const mercuryTextureBumpURL = "./resources/mercury_bumpmap.jpg";
-  let mercury = createPlanet(0.3, mercuryTextureURL, mercuryTextureBumpURL);
+  mercury = createPlanet(0.3, mercuryTextureURL, mercuryTextureBumpURL);
   //Mercury's orbit
   let mercuryOrbit = createOrbit(3, 3.1);
 
@@ -230,7 +239,7 @@ function createScene(canvas) {
   venusGroup = new THREE.Object3D();
   const venusTextureURL = "./resources/venusTexture.jpg";
   const venusTextureBumpURL = "./resources/venus_bumpap.jpg";
-  let venus = createPlanet(0.1, venusTextureURL, venusTextureBumpURL);
+  venus = createPlanet(0.1, venusTextureURL, venusTextureBumpURL);
   let venusOrbit = createOrbit(5.3, 5);
 
   venusGroup.add(venus, venusOrbit);
@@ -241,7 +250,7 @@ function createScene(canvas) {
   earthGroup = new THREE.Object3D();
   const earthTextureURL = "./resources/earth_texture.jpg";
   const earthTextureBumpURL = "./resources/earth_bumpmap.jpg";
-  let earth = createPlanet(0.28, earthTextureURL, earthTextureBumpURL);
+  earth = createPlanet(0.28, earthTextureURL, earthTextureBumpURL);
   earthGroup.add(earth);
   earth.position.set(-6.6, 0, 0);
 
@@ -261,7 +270,7 @@ function createScene(canvas) {
   marsGroup = new THREE.Object3D();
   const marsTextureURL = "./resources/mars_texture.jpg";
   const marsTextureBumpURL = "./resources/mars_bumpmap.jpg";
-  let mars = createPlanet(0.25, marsTextureURL, marsTextureBumpURL);
+  mars = createPlanet(0.25, marsTextureURL, marsTextureBumpURL);
   marsGroup.add(mars);
   mars.position.set(-9, 0, 0);
   let marsOrbit = createOrbit(9, 8.9);
@@ -272,7 +281,7 @@ function createScene(canvas) {
 
   jupiterGroup = new THREE.Object3D();
   const jupiterTextureURL = "./resources/jupiter_texture.jpg";
-  let jupiter = createPlanet(0.7, jupiterTextureURL);
+  jupiter = createPlanet(0.7, jupiterTextureURL);
   jupiter.position.set(-14, 0, 0);
   let jupiterOrbit = createOrbit(14, 13.9);
   jupiterGroup.add(jupiter, jupiterOrbit);
@@ -282,7 +291,7 @@ function createScene(canvas) {
 
   saturnGroup = new THREE.Object3D();
   const saturnTextureURL = "./resources/saturn_texture.jpg";
-  let saturn = createPlanet(0.67, saturnTextureURL);
+  saturn = createPlanet(0.67, saturnTextureURL);
   saturn.position.set(-18, 0, 0);
   let saturnOrbit = createOrbit(18, 17.9);
   saturnRing = createOrbit(1, 1.1, true);
@@ -296,7 +305,7 @@ function createScene(canvas) {
 
   uranusGroup = new THREE.Object3D();
   const uranusTextureURL = "./resources/uranus_texture.jpg";
-  let uranus = createPlanet(0.45, uranusTextureURL);
+  uranus = createPlanet(0.45, uranusTextureURL);
   uranus.position.set(-22, 0, 0);
   let uranusOrbit = createOrbit(22, 21.9);
   uranusGroup.add(uranus, uranusOrbit);
@@ -307,7 +316,7 @@ function createScene(canvas) {
 
   neptuneGroup = new THREE.Object3D();
   const neptuneTextureURL = "./resources/neptune_texture.jpg";
-  let neptune = createPlanet(0.4, neptuneTextureURL);
+  neptune = createPlanet(0.4, neptuneTextureURL);
   neptune.position.set(-25, 0, 0);
   let neptuneOrbit = createOrbit(25, 24.9);
   neptuneGroup.add(neptune, neptuneOrbit);
@@ -317,7 +326,7 @@ function createScene(canvas) {
 
   plutoGroup = new THREE.Object3D();
   const plutoTextureURL = "./resources/pluto_texture.jpg";
-  let pluto = createPlanet(0.2, plutoTextureURL);
+  pluto = createPlanet(0.2, plutoTextureURL);
   pluto.position.set(-28, 0, 0);
   let plutoOrbit = createOrbit(28, 27.9);
   plutoGroup.add(pluto, plutoOrbit);

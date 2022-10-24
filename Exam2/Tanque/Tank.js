@@ -20,9 +20,6 @@ let settings = null;
 
 let mapUrl = "./checker_large.gif";
 
-let tankGroup = null;
-let turretGroup = null;
-
 const tankTextureURL = "./Tank/Tank_texture.jpg";
 const tankTexture = new THREE.TextureLoader().load(tankTextureURL);
 
@@ -62,16 +59,14 @@ async function loadObj(objModelUrl, objectList, x, y, z) {
 
     let texture = objModelUrl.texture;
 
-    // object.traverse(function (child)
-    // {
-    for (const child of object.children) {
-      //     if (child.isMesh)
-      child.castShadow = true;
-      child.receiveShadow = true;
-      child.material.map = texture;
-      child.material.color.set("lime");
-    }
-    // });
+    object.traverse(function (child) {
+      if (child instanceof THREE.Mesh) {
+        child.receiveShadow = true;
+        child.material.map = texture;
+        child.castShadow = true;
+        child.material.color.set("lime");
+      }
+    });
 
     object.scale.set(3, 3, 3);
     object.position.z = z;
@@ -123,6 +118,8 @@ function update() {
 
 async function createScene(canvas) {
   renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   renderer.setSize(canvas.width, canvas.height);
 
@@ -160,15 +157,11 @@ async function createScene(canvas) {
   //Adding th light in front of the tank
 
   const pointLight = new THREE.PointLight(0xffffff, 3, 100);
-  pointLight.position.set(-3, -1.5, 1);
+  pointLight.position.set(-3, 6, 3);
+  pointLight.castShadow = true;
   scene.add(pointLight);
-
-  // Creting the objects
-  tankGroup = new THREE.Object3D();
-  turretGroup = new THREE.Object3D();
-
-  tankGroup.add(loadObj(tankObjModelUrl, tankObjectList, -3, -1.2, 0));
-  turretGroup.add(loadObj(turretObjModelUrl, turretObjectList, -3, 0, 0));
+  loadObj(tankObjModelUrl, tankObjectList, -3, -2, 0);
+  loadObj(turretObjModelUrl, turretObjectList, -3, -0.9, 0);
 }
 
 main();

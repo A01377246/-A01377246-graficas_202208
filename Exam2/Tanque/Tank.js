@@ -20,14 +20,21 @@ let settings = null;
 
 let mapUrl = "./checker_large.gif";
 
+let tankGroup = null;
+let turretGroup = null;
+
+const tankTextureURL = "./Tank/Tank_texture.jpg";
+const tankTexture = new THREE.TextureLoader().load(tankTextureURL);
+
 let tankObjModelUrl = {
   obj: "./Tank/Tank.obj",
-  textureMap: "./Tank/Tank_texture.jpg",
+  texture: tankTexture,
 };
 let turretObjModelUrl = {
   obj: "./Tank/Turret.obj",
-  textureMap: "./Tank/Tank_texture.jpg",
+  texture: tankTexture,
 };
+
 const createTankGui = () => {
   const tankGui = new GUI({ width: 200 });
 
@@ -35,9 +42,17 @@ const createTankGui = () => {
     "Tank Y": 0,
     "Turret Y": 0,
   };
+
+  tankGui.add(settings, "Turret Y", 0, 10, 1).onChange((delta) => {
+    turretObjectList[0].rotation.y = delta;
+  });
+
+  tankGui.add(settings, "Tank Y", 0, 10, 1).onChange((delta) => {
+    tankObjectList[0].rotation.y = delta;
+  });
 };
 
-async function loadObj(objModelUrl, objectList) {
+async function loadObj(objModelUrl, objectList, x, y, z) {
   try {
     const object = await new OBJLoader().loadAsync(
       objModelUrl.obj,
@@ -45,15 +60,7 @@ async function loadObj(objModelUrl, objectList) {
       onError
     );
 
-    let texture = objModelUrl.hasOwnProperty("normalMap")
-      ? new THREE.TextureLoader().load(objModelUrl.map)
-      : null;
-    let normalMap = objModelUrl.hasOwnProperty("normalMap")
-      ? new THREE.TextureLoader().load(objModelUrl.normalMap)
-      : null;
-    let specularMap = objModelUrl.hasOwnProperty("specularMap")
-      ? new THREE.TextureLoader().load(objModelUrl.specularMap)
-      : null;
+    let texture = objModelUrl.texture;
 
     // object.traverse(function (child)
     // {
@@ -62,59 +69,15 @@ async function loadObj(objModelUrl, objectList) {
       child.castShadow = true;
       child.receiveShadow = true;
       child.material.map = texture;
-      child.material.normalMap = normalMap;
-      child.material.specularMap = specularMap;
+      child.material.color.set("lime");
     }
     // });
 
     object.scale.set(3, 3, 3);
-    object.position.z = -3;
-    object.position.x = -1.5;
-    object.rotation.y = -6;
-    object.name = "objObject";
+    object.position.z = z;
+    object.position.x = x;
+    object.position.y = y;
 
-    objectList.push(object);
-    scene.add(object);
-  } catch (err) {
-    onError(err);
-  }
-}
-
-async function loadTurretObj(objModelUrl, objectList) {
-  try {
-    const object = await new OBJLoader().loadAsync(
-      objModelUrl.obj,
-      onProgress,
-      onError
-    );
-
-    let texture = objModelUrl.hasOwnProperty("normalMap")
-      ? new THREE.TextureLoader().load(objModelUrl.map)
-      : null;
-    let normalMap = objModelUrl.hasOwnProperty("normalMap")
-      ? new THREE.TextureLoader().load(objModelUrl.normalMap)
-      : null;
-    let specularMap = objModelUrl.hasOwnProperty("specularMap")
-      ? new THREE.TextureLoader().load(objModelUrl.specularMap)
-      : null;
-
-    // object.traverse(function (child)
-    // {
-    for (const child of object.children) {
-      //     if (child.isMesh)
-      child.castShadow = true;
-      child.receiveShadow = true;
-      child.material.map = texture;
-      child.material.normalMap = normalMap;
-      child.material.specularMap = specularMap;
-    }
-    // });
-
-    object.scale.set(3, 3, 3);
-    object.position.z = -3;
-    object.position.x = -1.5;
-    object.position.y = 1.1;
-    object.rotation.y = -6;
     object.name = "objObject";
 
     objectList.push(object);
@@ -194,9 +157,18 @@ async function createScene(canvas) {
   mesh.receiveShadow = true;
   scene.add(mesh);
 
+  //Adding th light in front of the tank
+
+  const pointLight = new THREE.PointLight(0xffffff, 3, 100);
+  pointLight.position.set(-3, -1.5, 1);
+  scene.add(pointLight);
+
   // Creting the objects
-  loadObj(tankObjModelUrl, tankObjectList);
-  loadTurretObj(turretObjModelUrl, turretObjectList);
+  tankGroup = new THREE.Object3D();
+  turretGroup = new THREE.Object3D();
+
+  tankGroup.add(loadObj(tankObjModelUrl, tankObjectList, -3, -1.2, 0));
+  turretGroup.add(loadObj(turretObjModelUrl, turretObjectList, -3, 0, 0));
 }
 
 main();
